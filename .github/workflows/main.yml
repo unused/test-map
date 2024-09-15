@@ -1,13 +1,26 @@
+---
+
 name: Ruby
 
 on:
   push:
     branches:
       - main
-
   pull_request:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Rubocop
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+    - name: Run rubocop
+      run: bundle exec rubocop
+
   build:
     runs-on: ubuntu-latest
     name: Ruby ${{ matrix.ruby }}
@@ -24,5 +37,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the default task
+    - name: Run testsuite
       run: bundle exec rake

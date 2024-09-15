@@ -9,7 +9,6 @@ module TestMap
       raise TraceInUseError.default if @trace&.enabled?
 
       @trace = TracePoint.new(:call) do
-        pp "#{_1.path}:#{_1.lineno}" if _1.path.start_with? Dir.pwd
         @files << _1.path
       end.tap(&:enable)
     end
