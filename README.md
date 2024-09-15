@@ -35,6 +35,10 @@ class Minitest::Test
 end
 ```
 
+### Rspec
+
+...
+
 ## Development
 
 ```sh
@@ -44,5 +48,5 @@ $ bundle exec rake # run testsuite
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at
-https://github.com/unused/test-map.
+Bug reports and pull requests are welcome on
+[GitHub](https://github.com/unused/test-map).
