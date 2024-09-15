@@ -1,0 +1,10 @@
+---
+lib/test_map/errors.rb:
+- test/test_map/errors_test.rb
+- test/test_map_test.rb
+lib/test_map/minitest/plugin.rb:
+- test/test_map/errors_test.rb
+- test/test_map_test.rb
+lib/test_map/file_recorder.rb:
+- test/test_map/errors_test.rb
+- test/test_map_test.rb
