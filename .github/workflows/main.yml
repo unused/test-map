@@ -39,3 +39,17 @@ jobs:
         bundler-cache: true
     - name: Run testsuite
       run: bundle exec rake
+
+  verify:
+    runs-on: ubuntu-latest
+    name: Verify
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+    - name: Run testsuite
+      run: |
+        cd examples/minitest && \
+        bundle install && \
+        bundle exec rake && \
+        sha1sum --check .test-map.yml.sha1
