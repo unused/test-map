@@ -7,10 +7,11 @@ module TestMap
   class Report
     attr_reader :results
 
-    def initialize = @results = Hash.new(Set.new)
+    def initialize = @results = Hash.new { Set.new }
 
     def add(files)
       test_file, *associated_files = files
+      Config.config[:logger].info "Adding #{test_file} with #{associated_files}"
       associated_files.each do |file|
         @results[file] = @results[file] << test_file
       end

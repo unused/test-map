@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'test_map/config'
 require_relative 'test_map/version'
 require_relative 'test_map/errors'
 require_relative 'test_map/report'
