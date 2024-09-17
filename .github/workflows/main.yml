@@ -54,6 +54,7 @@ jobs:
       - name: Run example testsuite
         run: |
           cd examples/${{ matrix.plugin }}
+          rm -f .test-map.yml
           bundle install
           bundle exec rake
           sha1sum --check .test-map.yml.sha1
