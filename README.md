@@ -4,6 +4,13 @@
 Track associated files of executed tests to optimize test execution on file
 changes.
 
+Test-Map results in a file that maps test files to the files they depend on.
+You can use this file to run only the tests that are affected by a file change.
+This is useful when you have a large test suite and want to optimize the time
+spent running tests. Submit a change request and only run tests that depend on
+what you changed. Optimizing in such way, the time spent waiting for CI to
+verify can be reduced to seconds.
+
 ## Usage
 
 Add test-map to your Gemfile.
