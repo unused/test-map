@@ -5,7 +5,7 @@ require 'test_helper'
 # Tests for configuration.
 class ConfigTest < Minitest::Test
   def test_respond_to_confgiure
-    assert subject.respond_to?(:configure)
+    assert_respond_to subject, :configure
   end
 
   def test_default_configuration

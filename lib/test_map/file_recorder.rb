@@ -8,9 +8,9 @@ module TestMap
     def trace
       raise TraceInUseError.default if @trace&.enabled?
 
-      @trace = TracePoint.new(:call) do
-        TestMap.logger.debug "#{_1.path}:#{_1.lineno}"
-        @files << _1.path
+      @trace = TracePoint.new(:call) do |tp|
+        TestMap.logger.debug "#{tp.path}:#{tp.lineno}"
+        @files << tp.path
       end.tap(&:enable)
     end
 

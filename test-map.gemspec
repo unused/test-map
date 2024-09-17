@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.files = Dir['LICENSE.txt', 'CHANGELOG.md', 'README.md', 'lib/**/*']
   spec.extra_rdoc_files = ['LICENSE.txt', 'README.md']
   spec.require_paths = ['lib']
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end
