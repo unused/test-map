@@ -1,9 +1,9 @@
 ---
-dog.rb:
-- test/dog_test.rb
 animal.rb:
-- test/dog_test.rb
 - test/animal_test.rb
 - test/cat_test.rb
+- test/dog_test.rb
 cat.rb:
 - test/cat_test.rb
+dog.rb:
+- test/dog_test.rb

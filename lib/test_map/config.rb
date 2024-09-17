@@ -9,7 +9,7 @@ module TestMap
     def self.configure = yield(config)
 
     def self.default_config
-      { logger: Logger.new('/dev/null') }
+      { logger: Logger.new('/dev/null'), out_file: '.test-map.yml' }
     end
   end
 end
