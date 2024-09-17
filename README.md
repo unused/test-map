@@ -14,36 +14,34 @@ $ bundle add test-map
 
 ### Minitest
 
-Include minitest plugin.
+Include minitest plugin in your test helper. Typically you want to include it
+conditionally so it only generates the test map when needed.
 
 ```ruby
 # filename: test/test_helper.rb
 
-require 'test_map'
-require 'test_map/minitest/plugin'
+# Include test-map after minitest has been required
+require 'test_map' if ENV['TEST_MAP']
+```
 
-# For Rails projects...
-class ActiveSupport::TestCase
-  include TestMap::Minitest::Plugin
+Run your tests with the `TEST_MAP` environment variable set.
 
-  # ...
-end
-
-# Or custom projects using Minitest...
-class Minitest::Test
-  include TestMap::Minitest::Plugin
-end
+```sh
+$ TEST_MAP=1 bundle exec ruby -Itest test/models/user_test.rb
+# or
+$ TEST_MAP=1 bundle exec rake test
 ```
 
 ### Rspec
 
-...
+WIP
 
 ## Development
 
 ```sh
 $ bundle install # install dependencies
 $ bundle exec rake # run testsuite
+$ bundle exec rubocop # run linter
 ```
 
 ## Contributing
