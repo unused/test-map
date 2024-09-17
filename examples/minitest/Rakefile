@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'minitest/test_task'
+require 'test_map/test_task'
 
 Minitest::TestTask.create
+TestMap::TestTask.create
 
 task default: :test
