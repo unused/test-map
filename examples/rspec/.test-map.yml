@@ -1,0 +1,9 @@
+---
+animal.rb:
+- spec/animal_spec.rb
+- spec/cat_spec.rb
+- spec/dog_spec.rb
+cat.rb:
+- spec/cat_spec.rb
+dog.rb:
+- spec/dog_spec.rb

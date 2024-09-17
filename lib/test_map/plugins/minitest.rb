@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module TestMap
-  module Minitest
+  module Plugins
     # Minitest plugin for TestMap.
-    module Plugin
+    module Minitest
       def self.included(_base)
         TestMap.logger.info 'Registering hooks for Minitest'
         ::Minitest.after_run do
@@ -28,8 +28,10 @@ module TestMap
   end
 end
 
+TestMap.logger.info 'Loading Minitest plugin'
+
 if defined?(Rails)
-  ActiveSupport::TestCase.include TestMap::Rails::Plugin
+  ActiveSupport::TestCase.include TestMap::Plugins::Minitest
 else
-  Minitest::Test.include TestMap::Minitest::Plugin
+  Minitest::Test.include TestMap::Plugins::Minitest
 end

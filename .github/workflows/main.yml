@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Rubocop
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-    - name: Run rubocop
-      run: bundle exec rubocop
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Run rubocop
+        run: bundle exec rubocop
 
   build:
     runs-on: ubuntu-latest
@@ -29,27 +29,31 @@ jobs:
         ruby:
           - '3.2'
           - '3.3'
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Run testsuite
-      run: bundle exec rake
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run testsuite
+        run: bundle exec rake
 
   verify:
     runs-on: ubuntu-latest
     name: Verify
+    strategy:
+      matrix:
+        plugin:
+          - minitest
+          - rspec
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-    - name: Run testsuite
-      run: |
-        cd examples/minitest && \
-        bundle install && \
-        bundle exec rake && \
-        sha1sum --check .test-map.yml.sha1
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+      - name: Run example testsuite
+        run: |
+          cd examples/${{ matrix.plugin }}
+          bundle install
+          bundle exec rake
+          sha1sum --check .test-map.yml.sha1

@@ -5,7 +5,7 @@ lib/test_map/file_recorder.rb:
 - test/test_map/errors_test.rb
 - test/test_map/report_test.rb
 - test/test_map_test.rb
-lib/test_map/minitest/plugin.rb:
+lib/test_map/plugins/minitest.rb:
 - test/test_map/errors_test.rb
 - test/test_map/report_test.rb
 - test/test_map_test.rb

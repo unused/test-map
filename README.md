@@ -14,7 +14,7 @@ $ bundle add test-map
 
 ### Minitest
 
-Include minitest plugin in your test helper. Typically you want to include it
+Include test-map in your test helper. Typically you want to include it
 conditionally so it only generates the test map when needed.
 
 ```ruby
@@ -34,7 +34,19 @@ $ TEST_MAP=1 bundle exec rake test
 
 ### Rspec
 
-WIP
+Include test-map in your test helper. Typically you want to include it
+conditionally so it only generates the test map when needed.
+
+```ruby
+# filename: spec/spec_helper.rb
+require 'test_map' if ENV['TEST_MAP']
+```
+
+Run your tests with the `TEST_MAP` environment variable set.
+
+```sh
+$ TEST_MAP=1 bundle exec rspec
+```
 
 ## Development
 

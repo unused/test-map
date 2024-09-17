@@ -12,5 +12,6 @@ module TestMap
   def self.logger = Config.config[:logger]
 end
 
-# Load Minitest plugin if Minitest is defined.
-require_relative 'test_map/minitest/plugin' if defined?(Minitest)
+# Load plugins for supported test frameworks.
+require_relative 'test_map/plugins/minitest' if defined?(Minitest)
+require_relative 'test_map/plugins/rspec' if defined?(RSpec)
