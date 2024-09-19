@@ -17,7 +17,7 @@ module TestMap
 
     # Adapter for minitest test task.
     class MinitestTask < Minitest::TestTask
-      def call = ruby(make_test_cmd)
+      def call = ruby(make_test_cmd, verbose: false)
 
       def files=(test_files)
         self.test_globs = test_files
