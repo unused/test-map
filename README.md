@@ -19,6 +19,17 @@ Add test-map to your Gemfile.
 $ bundle add test-map
 ```
 
+On demand you can adapt the configuration to your needs.
+
+```ruby
+TestMap::Configure.configure do |config|
+  config.logger = Logger.new($stdout) # default logs to dev/null
+  config.out_file = 'my-test-map.yml' # default is .test-map.yml
+  # defaults to [%r{^(vendor|test|spec)/}] }
+  config.exclude_patterns = [%r{^(libraries|testsuite)/}]
+end
+```
+
 ### Minitest
 
 Include test-map in your test helper. Typically you want to include it

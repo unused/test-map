@@ -38,7 +38,7 @@ module TestMap
         desc 'Run tests for changed files'
         task :changes do
           out_file = "#{Dir.pwd}/.test-map.yml"
-          test_files = Mapping.new(out_file).lookup(ARGV[1..]).compact
+          test_files = Mapping.new(out_file).lookup(*ARGV[1..])
 
           # puts "Running tests #{test_files.join(' ')}"
           test_task.files = test_files
