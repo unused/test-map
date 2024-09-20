@@ -3,6 +3,7 @@
 require_relative 'test_map/config'
 require_relative 'test_map/version'
 require_relative 'test_map/errors'
+require_relative 'test_map/filter'
 require_relative 'test_map/report'
 require_relative 'test_map/file_recorder'
 require_relative 'test_map/mapping'

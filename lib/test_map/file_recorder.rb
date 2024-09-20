@@ -22,6 +22,7 @@ module TestMap
 
       @files.filter { _1.start_with? Dir.pwd }
             .map { _1.sub("#{Dir.pwd}/", '') }
+            .then { Filter.call _1 }
     end
   end
 end

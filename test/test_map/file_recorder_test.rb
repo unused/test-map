@@ -20,7 +20,6 @@ class FileRecorderTest < Minitest::Test
     subject.trace
     subject.stop
 
-    assert_equal __FILE__.sub("#{Dir.pwd}/", ''), subject.results.first
     assert_equal 'file_recorder.rb', File.basename(subject.results.last)
   end
 
