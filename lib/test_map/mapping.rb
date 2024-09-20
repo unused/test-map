@@ -17,8 +17,11 @@ module TestMap
                   'test/%s_test.rb'
                 elsif File.exist?("#{Dir.pwd}/spec")
                   'spec/%s_spec.rb'
-                  # Handle files in packs
+                # elseif Handle files in packs
+                else
+                  return [] # skip files
                 end
+
       files.map { format(pattern, File.basename(_1, '.rb')) }
     end
   end
