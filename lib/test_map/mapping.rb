@@ -13,9 +13,10 @@ module TestMap
     end
 
     def apply_natural_mapping(files)
-      pattern = case
-                when File.exist?("#{Dir.pwd}/test") then 'test/%s_test.rb'
-                when File.exist?("#{Dir.pwd}/spec") then 'spec/%s_spec.rb'
+      pattern = if File.exist?("#{Dir.pwd}/test")
+                  'test/%s_test.rb'
+                elsif File.exist?("#{Dir.pwd}/spec")
+                  'spec/%s_spec.rb'
                   # Handle files in packs
                 end
       files.map { format(pattern, File.basename(_1, '.rb')) }
