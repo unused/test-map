@@ -9,20 +9,11 @@ module TestMap
 
     def lookup(*changed_files)
       new_files = apply_natural_mapping(changed_files - map.keys)
-      map.values_at(*changed_files).flatten.compact.uniq.concat(new_files)
+      map.values_at(*changed_files).concat(new_files).flatten.compact.uniq
     end
 
     def apply_natural_mapping(files)
-      pattern = if File.exist?("#{Dir.pwd}/test")
-                  'test/%s_test.rb'
-                elsif File.exist?("#{Dir.pwd}/spec")
-                  'spec/%s_spec.rb'
-                # elseif Handle files in packs
-                else
-                  return [] # skip files
-                end
-
-      files.map { format(pattern, File.basename(_1, '.rb')) }
+      files.map { |file| NaturalMapping.new(file).test_files }
     end
   end
 end

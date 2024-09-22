@@ -27,6 +27,9 @@ TestMap::Configure.configure do |config|
   config.out_file = 'my-test-map.yml' # default is .test-map.yml
   # defaults to [%r{^(vendor|test|spec)/}] }
   config.exclude_patterns = [%r{^(libraries|testsuite)/}]
+  # register a custom rule to match new files; must implement `call(file)`;
+  # defaults to nil
+  config.natural_mapping = ->(file) { file.sub(%r{^library/}, 'test/') }
 end
 ```
 

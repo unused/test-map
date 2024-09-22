@@ -6,6 +6,7 @@ require_relative 'test_map/errors'
 require_relative 'test_map/filter'
 require_relative 'test_map/report'
 require_relative 'test_map/file_recorder'
+require_relative 'test_map/natural_mapping'
 require_relative 'test_map/mapping'
 
 # TestMap records associated files to test execution.

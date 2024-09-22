@@ -3,6 +3,7 @@ lib/test_map/config.rb:
 - lib/test_map/config.rb
 - lib/test_map/file_recorder.rb
 - lib/test_map/filter.rb
+- lib/test_map/natural_mapping.rb
 lib/test_map/errors.rb:
 - lib/test_map/file_recorder.rb
 lib/test_map/file_recorder.rb:
@@ -11,6 +12,7 @@ lib/test_map/file_recorder.rb:
 - lib/test_map/file_recorder.rb
 - lib/test_map/filter.rb
 - lib/test_map/mapping.rb
+- lib/test_map/natural_mapping.rb
 - lib/test_map/plugins/minitest.rb
 - lib/test_map/report.rb
 lib/test_map/filter.rb:
@@ -18,12 +20,16 @@ lib/test_map/filter.rb:
 - lib/test_map/filter.rb
 lib/test_map/mapping.rb:
 - lib/test_map/mapping.rb
+lib/test_map/natural_mapping.rb:
+- lib/test_map/mapping.rb
+- lib/test_map/natural_mapping.rb
 lib/test_map/plugins/minitest.rb:
 - lib/test_map/config.rb
 - lib/test_map/errors.rb
 - lib/test_map/file_recorder.rb
 - lib/test_map/filter.rb
 - lib/test_map/mapping.rb
+- lib/test_map/natural_mapping.rb
 - lib/test_map/report.rb
 lib/test_map/report.rb:
 - lib/test_map/report.rb
