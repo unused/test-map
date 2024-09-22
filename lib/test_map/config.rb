@@ -11,7 +11,7 @@ module TestMap
 
     def self.default_config
       { logger: Logger.new('/dev/null'), out_file: '.test-map.yml',
-        exclude_patterns: [%r{^(vendor|test|spec)/}], natural_mapping: nil }
+        exclude_patterns: [%r{^(vendor)/}], natural_mapping: nil }
     end
   end
 end
