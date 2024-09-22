@@ -1,6 +1,6 @@
 ---
 
-name: Ruby
+name: Main Pipeline
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
       - name: Run rubocop
         run: bundle exec rubocop
 
-  build:
+  test:
     runs-on: ubuntu-latest
     name: Ruby ${{ matrix.ruby }}
     strategy:
@@ -58,3 +58,20 @@ jobs:
           bundle install
           bundle exec rake
           sha1sum --check .test-map.yml.sha1
+
+  release:
+    if: github.ref == 'refs/heads/main'
+    needs: [lint, test, verify]
+    name: Push gem to RubyGems.org
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: ruby
+      - uses: rubygems/release-gem@v1
