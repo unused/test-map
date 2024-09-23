@@ -16,6 +16,10 @@ class NaturalMappingTest < Minitest::Test
     assert_equal ['test/model/animal_test.rb'], mapping.test_files
   end
 
+  def test_registered_rules
+    refute_empty subject.registered_rules
+  end
+
   def test_specs
     File.stub(:exist?, ->(type) { type == 'spec' }) do
       mapping = subject.new('app/model/animal.rb')
