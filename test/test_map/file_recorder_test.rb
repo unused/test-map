@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'fixtures/sample'
 
 # Tests for file recorder.
 class FileRecorderTest < Minitest::Test
@@ -21,6 +22,18 @@ class FileRecorderTest < Minitest::Test
     subject.stop
 
     assert_equal 'file_recorder.rb', File.basename(subject.results.last)
+  end
+
+  def test_tracing_sample
+    subject.trace { Sample.new.hello }
+
+    assert_equal 'sample.rb', File.basename(subject.results.first)
+  end
+
+  def test_tracing_in_block_mode
+    subject.trace { Sample.new.hello }
+
+    refute_predicate subject.instance_variable_get(:@trace), :enabled?
   end
 
   private

@@ -5,13 +5,19 @@ module TestMap
   class FileRecorder
     def initialize = @files = []
 
-    def trace
+    def trace(&block)
       raise TraceInUseError.default if @trace&.enabled?
 
       @trace = TracePoint.new(:call) do |tp|
         TestMap.logger.debug "#{tp.path}:#{tp.lineno}"
         @files << tp.path
-      end.tap(&:enable)
+      end
+
+      if block_given?
+        @trace.enable { block.call }
+      else
+        @trace.enable
+      end
     end
 
     def stop = @trace&.disable

@@ -5,10 +5,8 @@ TestMap.logger.info 'Loading RSpec plugin'
 RSpec.configure do |config|
   config.around(:example) do |example|
     # path = example.metadata[:example_group][:file_path]
-    recorder = TestMap::FileRecorder.new.tap(&:trace)
-    example.run
-  ensure
-    recorder.stop
+    recorder = TestMap::FileRecorder.new
+    recorder.trace { example.run }
     TestMap.reporter.add recorder.results
   end
 
