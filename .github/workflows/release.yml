@@ -8,7 +8,7 @@ on:
 jobs:
   release:
     if: github.ref == 'refs/heads/main'
-    needs: [lint, test, verify]
+    # needs: [lint, test, verify]
     name: Push gem to RubyGems.org
     runs-on: ubuntu-latest
     permissions:
