@@ -15,6 +15,12 @@ module TestMap
       end
     end
 
+    def write(file)
+      result = to_yaml
+      result = YAML.safe_load_file(file).deep_merge(result) if Config.config[:merge]
+      File.write file, result
+    end
+
     def results = @results.transform_values { _1.to_a.sort }.sort.to_h
     def to_yaml = results.to_yaml
   end

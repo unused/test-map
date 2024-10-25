@@ -19,20 +19,6 @@ Add test-map to your Gemfile.
 $ bundle add test-map
 ```
 
-On demand you can adapt the configuration to your needs.
-
-```ruby
-TestMap::Configure.configure do |config|
-  config.logger = Logger.new($stdout) # default logs to dev/null
-  config.out_file = 'my-test-map.yml' # default is .test-map.yml
-  # defaults to [%r{^(vendor|test|spec)/}] }
-  config.exclude_patterns = [%r{^(libraries|testsuite)/}]
-  # register a custom rule to match new files; must implement `call(file)`;
-  # defaults to nil
-  config.natural_mapping = ->(file) { file.sub(%r{^library/}, 'test/') }
-end
-```
-
 ### Minitest
 
 Include test-map in your test helper. Typically you want to include it
@@ -53,6 +39,25 @@ $ TEST_MAP=1 bundle exec ruby -Itest test/models/user_test.rb
 $ TEST_MAP=1 bundle exec rake test
 ```
 
+Using the a dedicated rake task you can connect a file watcher and trigger
+tests on file changes.
+
+```ruby
+# filename: Rakefile
+require 'test_map/test_task'
+
+TestMap::TestTask.create
+```
+
+Using [entr](https://eradman.com/entrproject/) as example file watcher.
+
+```sh
+# find all ruby files | watch them, postpone first execution, clear screen
+#   with every run and on file change run test suite for the changed file
+#   (placeholder /_).
+$ find . -name "*.rb" | entr -cp bundle exec rake test:changes /_
+```
+
 ### Rspec
 
 Include test-map in your test helper. Typically you want to include it
@@ -69,7 +74,31 @@ Run your tests with the `TEST_MAP` environment variable set.
 $ TEST_MAP=1 bundle exec rspec
 ```
 
+## Configuration
+
+On demand you can adapt the configuration to your needs.
+
+```ruby
+TestMap::Configure.configure do |config|
+  config.logger = Logger.new($stdout) # default logs to dev/null
+  config.out_file = 'my-test-map.yml' # default is .test-map.yml
+  # defaults to [%r{^(vendor)/}] }
+  config.exclude_patterns = [%r{^(vendor|other_libraries)/}]
+  # register a custom rule to match new files; must implement `call(file)`;
+  # defaults to nil
+  config.natural_mapping = ->(file) { file.sub(%r{^library/}, 'test/') }
+end
+```
+
 ## Development
+
+Open list of features:
+
+- [ ] Configure file exclude list (e.g. test files are not needed).
+- [ ] Auto-handle packs, packs with subdirectories.
+- [ ] Demonstrate usage with file watchers.
+- [ ] Demonstrate CI pipelines with GitHub actions and GitLab CI.
+- [ ] Merge results.
 
 ```sh
 $ bundle install # install dependencies
@@ -79,5 +108,5 @@ $ bundle exec rubocop # run linter
 
 ## Contributing
 
-Bug reports and pull requests are welcome on
+Bug reports and pull requests are very welcome on
 [GitHub](https://github.com/unused/test-map).

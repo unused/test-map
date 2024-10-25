@@ -13,6 +13,13 @@ class ConfigTest < Minitest::Test
     assert_kind_of Logger, subject.config[:logger]
   end
 
+  def test_ensure_default_keys
+    expected_keys = %i[logger out_file exclude_patterns natural_mapping
+                       skip_files merge]
+
+    assert_equal expected_keys, subject.config.keys
+  end
+
   private
 
   def subject = TestMap::Config
