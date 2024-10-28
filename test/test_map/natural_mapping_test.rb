@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require './test/test_helper'
 
 # Tests for mapping.
 class NaturalMappingTest < Minitest::Test
@@ -35,6 +35,10 @@ class NaturalMappingTest < Minitest::Test
 
       assert_empty mapping.test_files
     end
+  end
+
+  def test_has_registered_default_rules
+    assert_predicate subject.registered_rules, :any?
   end
 
   private

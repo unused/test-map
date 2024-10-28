@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require './test/test_helper'
 
 # Tests for configuration.
 class ConfigTest < Minitest::Test
@@ -18,6 +18,10 @@ class ConfigTest < Minitest::Test
                        skip_files merge]
 
     assert_equal expected_keys, subject.config.keys
+  end
+
+  def test_shorthand_access
+    assert_equal '.test-map.yml', subject[:out_file]
   end
 
   private
