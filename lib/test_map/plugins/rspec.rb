@@ -11,7 +11,6 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do
-    result = TestMap.reporter.to_yaml
-    File.write "#{Dir.pwd}/#{TestMap::Config.config[:out_file]}", result
+    TestMap.reporter.write "#{Dir.pwd}/#{TestMap::Config.config[:out_file]}"
   end
 end

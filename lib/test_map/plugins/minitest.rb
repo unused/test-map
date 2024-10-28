@@ -7,8 +7,7 @@ module TestMap
       def self.included(_base)
         TestMap.logger.info 'Registering hooks for Minitest'
         ::Minitest.after_run do
-          result = TestMap.reporter.to_yaml
-          File.write "#{Dir.pwd}/#{Config.config[:out_file]}", result
+          TestMap.reporter.write "#{Dir.pwd}/#{Config.config[:out_file]}"
         end
       end
 

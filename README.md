@@ -79,14 +79,15 @@ $ TEST_MAP=1 bundle exec rspec
 On demand you can adapt the configuration to your needs.
 
 ```ruby
-TestMap::Configure.configure do |config|
-  config.logger = Logger.new($stdout) # default logs to dev/null
-  config.out_file = 'my-test-map.yml' # default is .test-map.yml
+TestMap::Config.configure do |config|
+  config[:logger] = Logger.new($stdout) # default logs to dev/null
+  config[:merge] = false # merge results (e.g. with multiple testsuites)
+  config[:out_file] = 'my-test-map.yml' # default is .test-map.yml
   # defaults to [%r{^(vendor)/}] }
-  config.exclude_patterns = [%r{^(vendor|other_libraries)/}]
+  config[:exclude_patterns] = [%r{^(vendor|other_libraries)/}]
   # register a custom rule to match new files; must implement `call(file)`;
   # defaults to nil
-  config.natural_mapping = ->(file) { file.sub(%r{^library/}, 'test/') }
+  config[:natural_mapping] = ->(file) { file.sub(%r{^library/}, 'test/') }
 end
 ```
 

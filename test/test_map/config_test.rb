@@ -20,6 +20,10 @@ class ConfigTest < Minitest::Test
     assert_equal expected_keys, subject.config.keys
   end
 
+  def test_shorthand_access
+    assert_equal '.test-map.yml', subject[:out_file]
+  end
+
   private
 
   def subject = TestMap::Config
