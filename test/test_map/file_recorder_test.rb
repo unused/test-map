@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'test_helper'
-require 'fixtures/sample'
+require './test/test_helper'
+require './test/fixtures/sample'
 
 # Tests for file recorder.
 class FileRecorderTest < Minitest::Test

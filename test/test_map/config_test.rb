@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require './test/test_helper'
 
 # Tests for configuration.
 class ConfigTest < Minitest::Test

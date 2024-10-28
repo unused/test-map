@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require './test/test_helper'
 
 # Tests for trace in use error.
 class ReportTest < Minitest::Test
