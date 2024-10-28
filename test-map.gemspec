@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   # `git ls-files -z` loads the files in the RubyGem that have been added into
   # git.
   spec.files = Dir['LICENSE', 'CHANGELOG.md', 'README.md', 'lib/**/*']
-  spec.extra_rdoc_files = ['LICENSE', 'README.md']
+  spec.extra_rdoc_files = ['LICENSE.txt', 'README.md']
   spec.require_paths = ['lib']
   spec.metadata['rubygems_mfa_required'] = 'true'
 end
