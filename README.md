@@ -95,11 +95,11 @@ end
 
 Open list of features:
 
-- [ ] Configure file exclude list (e.g. test files are not needed).
+- [x] Configure file exclude list (e.g. test files are not needed).
 - [ ] Auto-handle packs, packs with subdirectories.
-- [ ] Demonstrate usage with file watchers.
+- [x] Demonstrate usage with file watchers.
 - [ ] Demonstrate CI pipelines with GitHub actions and GitLab CI.
-- [ ] Merge results.
+- [x] Merge results.
 
 ```sh
 $ bundle install # install dependencies
