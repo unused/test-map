@@ -8,11 +8,23 @@ require_relative 'test_map/report'
 require_relative 'test_map/file_recorder'
 require_relative 'test_map/natural_mapping'
 require_relative 'test_map/mapping'
+require_relative 'test_map/cache'
 
 # TestMap records associated files to test execution.
 module TestMap
   def self.reporter = @reporter ||= Report.new
   def self.logger = Config.config[:logger]
+
+  def self.cache
+    @cache ||= Cache.new(
+      "#{Dir.pwd}/#{Config[:cache_file]}",
+      "#{Dir.pwd}/#{Config[:out_file]}"
+    )
+  end
+
+  class << self
+    attr_accessor :suite_passed
+  end
 end
 
 # Load plugins for supported test frameworks.

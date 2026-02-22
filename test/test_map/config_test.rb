@@ -14,7 +14,7 @@ class ConfigTest < Minitest::Test
   end
 
   def test_ensure_default_keys
-    expected_keys = %i[logger out_file exclude_patterns natural_mapping
+    expected_keys = %i[logger out_file cache_file exclude_patterns natural_mapping
                        skip_files merge]
 
     assert_equal expected_keys, subject.config.keys
