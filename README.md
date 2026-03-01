@@ -4,12 +4,10 @@
 Track associated files of executed tests to optimize test execution on file
 changes.
 
-Test-Map results in a file that maps test files to the files they depend on.
-You can use this file to run only the tests that are affected by a file change.
-This is useful when you have a large test suite and want to optimize the time
-spent running tests. Submit a change request and only run tests that depend on
-what you changed. Optimizing in such way, the time spent waiting for CI to
-verify can be reduced to seconds.
+Test-Map records which source files each test touches and caches their
+checksums. On subsequent runs, tests whose dependencies haven't changed are
+automatically skipped. This is useful when you have a large test suite and want
+to optimize the time spent running tests locally or in CI.
 
 ## Usage
 
@@ -21,57 +19,38 @@ $ bundle add test-map
 
 ### Minitest
 
-Include test-map in your test helper. Typically you want to include it
-conditionally so it only generates the test map when needed.
+Include test-map in your test helper.
 
 ```ruby
 # filename: test/test_helper.rb
 
 # Include test-map after minitest has been required
-require 'test_map' if ENV['TEST_MAP']
+require 'test_map'
 ```
 
-Run your tests with the `TEST_MAP` environment variable set.
+Run your tests. On the first run test-map records file dependencies into
+`.test-map.yml` and checksums into `.test-cache.yml`. On subsequent runs,
+tests whose source files haven't changed are automatically skipped.
 
 ```sh
-$ TEST_MAP=1 bundle exec ruby -Itest test/models/user_test.rb
+$ bundle exec ruby -Itest test/models/user_test.rb
 # or
-$ TEST_MAP=1 bundle exec rake test
-```
-
-Using the a dedicated rake task you can connect a file watcher and trigger
-tests on file changes.
-
-```ruby
-# filename: Rakefile
-require 'test_map/test_task'
-
-TestMap::TestTask.create
-```
-
-Using [entr](https://eradman.com/entrproject/) as example file watcher.
-
-```sh
-# find all ruby files | watch them, postpone first execution, clear screen
-#   with every run and on file change run test suite for the changed file
-#   (placeholder /_).
-$ find . -name "*.rb" | entr -cp bundle exec rake test:changes /_
+$ bundle exec rake test
 ```
 
 ### Rspec
 
-Include test-map in your test helper. Typically you want to include it
-conditionally so it only generates the test map when needed.
+Include test-map in your spec helper.
 
 ```ruby
 # filename: spec/spec_helper.rb
-require 'test_map' if ENV['TEST_MAP']
+require 'test_map'
 ```
 
-Run your tests with the `TEST_MAP` environment variable set.
+Run your tests. Caching works the same as with Minitest.
 
 ```sh
-$ TEST_MAP=1 bundle exec rspec
+$ bundle exec rspec
 ```
 
 ## Configuration
@@ -83,6 +62,7 @@ TestMap::Config.configure do |config|
   config[:logger] = Logger.new($stdout) # default logs to dev/null
   config[:merge] = false # merge results (e.g. with multiple testsuites)
   config[:out_file] = 'my-test-map.yml' # default is .test-map.yml
+  config[:cache_file] = 'my-test-cache.yml' # default is .test-cache.yml
   # defaults to [%r{^(vendor)/}] }
   config[:exclude_patterns] = [%r{^(vendor|other_libraries)/}]
   # register a custom rule to match new files; must implement `call(file)`;
@@ -92,14 +72,6 @@ end
 ```
 
 ## Development
-
-Open list of features:
-
-- [x] Configure file exclude list (e.g. test files are not needed).
-- [ ] Auto-handle packs, packs with subdirectories.
-- [x] Demonstrate usage with file watchers.
-- [ ] Demonstrate CI pipelines with GitHub actions and GitLab CI.
-- [x] Merge results.
 
 ```sh
 $ bundle install # install dependencies
