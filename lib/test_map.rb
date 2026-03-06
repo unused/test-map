@@ -9,6 +9,7 @@ require_relative 'test_map/file_recorder'
 require_relative 'test_map/natural_mapping'
 require_relative 'test_map/mapping'
 require_relative 'test_map/cache'
+require_relative 'test_map/event'
 
 # TestMap records associated files to test execution.
 module TestMap
