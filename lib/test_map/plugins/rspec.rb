@@ -1,14 +1,49 @@
 # frozen_string_literal: true
 
+require_relative 'rspec/cache_formatter'
+
 TestMap.logger.info 'Loading RSpec plugin'
 TestMap.suite_passed = true
 
-RSpec.configure do |config|
-  config.around(:example) do |example|
-    test_file = example.metadata[:file_path].sub("#{Dir.pwd}/", '').sub(%r{^\./}, '')
+module TestMap
+  module Plugins
+    # RSpec integration for TestMap.
+    module RSpec
+      def self.write_results
+        out_file = "#{Dir.pwd}/#{Config.config[:out_file]}"
+        reporter_results = TestMap.reporter.results
 
-    if TestMap.cache.fresh?(test_file)
-      skip 'test-map: cached'
+        # All tests were cache-skipped, existing files are still valid
+        return if reporter_results.empty?
+
+        full_results = merge_results(out_file, reporter_results)
+        File.write(out_file, full_results.to_yaml)
+        TestMap.cache.write(full_results) if TestMap.suite_passed
+      end
+
+      # Merge with existing map to preserve mappings for cache-skipped tests
+      def self.merge_results(out_file, reporter_results)
+        if File.exist?(out_file)
+          TestMap.reporter.merge(reporter_results, YAML.safe_load_file(out_file))
+        else
+          reporter_results
+        end
+      end
+    end
+  end
+end
+
+RSpec.configure do |config|
+  config.default_formatter = TestMap::Plugins::RSpec::CacheFormatter
+
+  config.before(:context) do
+    test_file = self.class.metadata[:file_path].sub("#{Dir.pwd}/", '').sub(%r{^\./}, '')
+    skip 'test-map: cached' if TestMap.cache.fresh?(test_file)
+  end
+
+  config.around(:example) do |example|
+    if example.metadata[:skip]
+      example.run
     else
       recorder = TestMap::FileRecorder.new
       recorder.trace { example.run }
@@ -18,21 +53,5 @@ RSpec.configure do |config|
     end
   end
 
-  config.after(:suite) do
-    out_file = "#{Dir.pwd}/#{TestMap::Config.config[:out_file]}"
-    reporter_results = TestMap.reporter.results
-
-    # All tests were cache-skipped, existing files are still valid
-    next if reporter_results.empty?
-
-    # Merge with existing map to preserve mappings for cache-skipped tests
-    full_results = if File.exist?(out_file)
-                     TestMap.reporter.merge(reporter_results, YAML.safe_load_file(out_file))
-                   else
-                     reporter_results
-                   end
-
-    File.write(out_file, full_results.to_yaml)
-    TestMap.cache.write(full_results) if TestMap.suite_passed
-  end
+  config.after(:suite) { TestMap::Plugins::RSpec.write_results }
 end
