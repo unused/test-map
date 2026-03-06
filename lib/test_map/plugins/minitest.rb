@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 
 module TestMap
+  # CachedSkip is raised to skip tests whose files haven't changed.
+  # Subclasses Minitest::Skip so Minitest treats it as a skip, but the
+  # custom reporter can distinguish it and show `C` instead of `S`.
+  class CachedSkip < Minitest::Skip
+    def initialize(msg = 'test-map: cached')
+      super
+    end
+
+    def result_label
+      'Cached'
+    end
+  end
+end
+
+require_relative 'minitest/cache_reporter'
+
+module TestMap
   module Plugins
     # Minitest plugin for TestMap.
     module Minitest
@@ -9,6 +26,11 @@ module TestMap
         TestMap.suite_passed = true
 
         ::Minitest.after_run { write_results }
+        install_cache_reporter
+      end
+
+      def self.install_cache_reporter
+        ::Minitest.extensions << 'test_map_cache'
       end
 
       def self.write_results
@@ -32,22 +54,18 @@ module TestMap
         end
       end
 
-      def after_setup
+      def before_setup
         test_file = resolve_test_file
-        if test_file && TestMap.cache.fresh?(test_file)
-          @_test_map_skipped = true
-          skip 'test-map: cached'
-        else
-          @recorder = FileRecorder.new.tap(&:trace)
-        end
+        raise TestMap::CachedSkip if test_file && TestMap.cache.fresh?(test_file)
 
+        @recorder = FileRecorder.new.tap(&:trace)
         super
       end
 
       def before_teardown
         super
 
-        return if @_test_map_skipped || !@recorder
+        return unless @recorder
 
         @recorder.stop
         TestMap.reporter.add @recorder.results

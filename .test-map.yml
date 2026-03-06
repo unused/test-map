@@ -2,10 +2,13 @@
 lib/test_map/cache.rb:
 - test/test_map/cache_test.rb
 lib/test_map/config.rb:
+- lib/test_map/plugins/minitest.rb
 - test/test_map/config_test.rb
 - test/test_map/file_recorder_test.rb
 - test/test_map/filter_test.rb
+- test/test_map/mapping_test.rb
 - test/test_map/natural_mapping_test.rb
+- test/test_map/plugins/minitest_test.rb
 lib/test_map/errors.rb:
 - test/test_map/errors_test.rb
 - test/test_map/file_recorder_test.rb
@@ -13,6 +16,8 @@ lib/test_map/event.rb:
 - test/test_map/cache_test.rb
 - test/test_map/event_test.rb
 lib/test_map/file_recorder.rb:
+- lib/test_map/plugins/minitest.rb
+- lib/test_map/plugins/minitest/cache_reporter.rb
 - test/test_map/cache_test.rb
 - test/test_map/config_test.rb
 - test/test_map/errors_test.rb
@@ -21,6 +26,7 @@ lib/test_map/file_recorder.rb:
 - test/test_map/filter_test.rb
 - test/test_map/mapping_test.rb
 - test/test_map/natural_mapping_test.rb
+- test/test_map/plugins/minitest_test.rb
 - test/test_map/report_test.rb
 - test/test_map_test.rb
 lib/test_map/filter.rb:
@@ -32,6 +38,8 @@ lib/test_map/natural_mapping.rb:
 - test/test_map/mapping_test.rb
 - test/test_map/natural_mapping_test.rb
 lib/test_map/plugins/minitest.rb:
+- lib/test_map/plugins/minitest.rb
+- lib/test_map/plugins/minitest/cache_reporter.rb
 - test/test_map/cache_test.rb
 - test/test_map/config_test.rb
 - test/test_map/errors_test.rb
@@ -40,6 +48,7 @@ lib/test_map/plugins/minitest.rb:
 - test/test_map/filter_test.rb
 - test/test_map/mapping_test.rb
 - test/test_map/natural_mapping_test.rb
+- test/test_map/plugins/minitest_test.rb
 - test/test_map/report_test.rb
 - test/test_map_test.rb
 lib/test_map/report.rb:
@@ -60,3 +69,13 @@ test/test_map/natural_mapping_test.rb:
 - test/test_map/natural_mapping_test.rb
 test/test_map/report_test.rb:
 - test/test_map/report_test.rb
+test/test_map/event_test.rb:
+- test/test_map/event_test.rb
+lib/test_map.rb:
+- lib/test_map/plugins/minitest.rb
+- test/test_map/plugins/minitest_test.rb
+lib/test_map/plugins/minitest/cache_reporter.rb:
+- lib/test_map/plugins/minitest/cache_reporter.rb
+- test/test_map/plugins/minitest_test.rb
+test/test_map/plugins/minitest_test.rb:
+- test/test_map/plugins/minitest_test.rb
