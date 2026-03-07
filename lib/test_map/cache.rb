@@ -69,7 +69,9 @@ module TestMap
     end
 
     def file_exist?(file)
-      @file_exists_cache[file] ||= File.exist?(File.join(@root, file))
+      return @file_exists_cache[file] if @file_exists_cache.key?(file)
+
+      @file_exists_cache[file] = File.exist?(File.join(@root, file))
     end
 
     def collect_tracked_files(results)

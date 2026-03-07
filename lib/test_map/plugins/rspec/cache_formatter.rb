@@ -24,7 +24,7 @@ module TestMap
         def example_pending(notification)
           if cached?(notification.example)
             @cached_count += 1
-            output.print ::RSpec::Core::Formatters::ConsoleCodes.wrap('C', :cyan)
+            output.print ::RSpec::Core::Formatters::ConsoleCodes.wrap('c', :cyan)
           else
             super
           end

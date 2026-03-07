@@ -38,7 +38,7 @@ RSpec.configure do |config|
 
   config.before(:context) do
     test_file = self.class.metadata[:file_path].sub("#{Dir.pwd}/", '').sub(%r{^\./}, '')
-    skip 'test-map: cached' if TestMap.cache.fresh?(test_file)
+    skip TestMap::Plugins::RSpec::CacheFormatter::CACHED_MESSAGE if TestMap.cache.fresh?(test_file)
   end
 
   config.around(:example) do |example|
