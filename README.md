@@ -17,6 +17,55 @@ Add test-map to your Gemfile.
 $ bundle add test-map
 ```
 
+Require test-map in your test helper or spec helper.
+
+```ruby
+# filename: test/test_helper.rb
+require 'test_map'
+```
+
+## Example Run
+
+Running the testsuite, test-map creates a mapping of tests to their code files,
+as well as a test-file result cache. Running the testsuite again, all
+successfully run tests are cached and skipped. Chaning a file, **only tests
+that need to be run are executed**.
+
+```sh
+# Running the testsuite for the first time, all tests are executed and mapped
+ > be rake
+Run options: --seed 10112
+
+# Running:
+
+.......................................................
+
+Finished in 0.042190s, 1303.6402 runs/s, 1730.2861 assertions/s.
+55 runs, 73 assertions, 0 failures, 0 errors, 0 skips, 0 cached
+
+# Running again without changes, all tests are cached and skipped
+ > be rake
+Run options: --seed 40581
+
+# Running:
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+Finished in 0.007902s, 6960.1126 runs/s, 0.0000 assertions/s.
+55 runs, 0 assertions, 0 failures, 0 errors, 0 skips, 55 cached
+
+# Change a file and rerun the testsuite
+ > be rake
+Run options: --seed 47682
+
+# Running:
+
+CCCCCCCCCC...CCCCCCCCCCCC.....CCCCCCCCCCCCCCCCCCCCCCCCC
+
+Finished in 0.014029s, 3920.3764 runs/s, 570.2366 assertions/s.
+55 runs, 8 assertions, 0 failures, 0 errors, 0 skips, 47 cached
+```
+
 ### Minitest
 
 Include test-map in your test helper.
