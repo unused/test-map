@@ -41,6 +41,7 @@ module TestMap
 
     def global_files_changed?
       return @global_files_changed unless @global_files_changed.nil?
+
       @global_files_changed = GLOBAL_FILES.any? do |f|
         file_exist?(f) && current_checksum(f) != cached_checksums[f]
       end
@@ -68,7 +69,9 @@ module TestMap
     end
 
     def file_exist?(file)
-      @file_exists_cache[file] ||= File.exist?(File.join(@root, file))
+      return @file_exists_cache[file] if @file_exists_cache.key?(file)
+
+      @file_exists_cache[file] = File.exist?(File.join(@root, file))
     end
 
     def collect_tracked_files(results)
