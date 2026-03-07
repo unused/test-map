@@ -26,8 +26,9 @@ module TestMap
     def results
       raise NotTracedError.default unless @trace
 
-      @files.filter { _1.start_with? Dir.pwd }
-            .map { _1.sub("#{Dir.pwd}/", '') }
+      cwd = "#{Dir.pwd}/"
+      @files.filter { _1.start_with? cwd }
+            .map { _1.sub(cwd, '') }
             .then { Filter.call _1 }
     end
   end
