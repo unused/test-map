@@ -12,13 +12,16 @@ module TestMap
       @cache_file = cache_file
       @map_file = map_file
       @root = root
+      @global_files_changed = nil
+      @current_checksums = {}
+      @file_exists_cache = {}
     end
 
     def fresh?(test_file)
       return false unless cached_checksums
       return false if global_files_changed?
 
-      files_to_check = [test_file] + source_files_for(test_file)
+      files_to_check = [test_file].concat(source_files_for(test_file))
       files_to_check.all? { |f| file_exist?(f) && current_checksum(f) == cached_checksums[f] }
     end
 
@@ -37,7 +40,8 @@ module TestMap
     end
 
     def global_files_changed?
-      GLOBAL_FILES.any? do |f|
+      return @global_files_changed unless @global_files_changed.nil?
+      @global_files_changed = GLOBAL_FILES.any? do |f|
         file_exist?(f) && current_checksum(f) != cached_checksums[f]
       end
     end
@@ -60,10 +64,12 @@ module TestMap
     end
 
     def current_checksum(file)
-      Digest::SHA256.file(File.join(@root, file)).hexdigest
+      @current_checksums[file] ||= Digest::SHA256.file(File.join(@root, file)).hexdigest
     end
 
-    def file_exist?(file) = File.exist?(File.join(@root, file))
+    def file_exist?(file)
+      @file_exists_cache[file] ||= File.exist?(File.join(@root, file))
+    end
 
     def collect_tracked_files(results)
       sources = results.keys
