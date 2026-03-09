@@ -3,7 +3,7 @@
 module TestMap
   # FileRecorder records files accessed during test execution.
   class FileRecorder
-    def initialize = @files = []
+    def initialize = @files = Set.new
 
     def trace(&block)
       raise TraceInUseError.default if @trace&.enabled?
