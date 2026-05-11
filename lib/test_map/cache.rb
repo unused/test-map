@@ -26,14 +26,37 @@ module TestMap
     end
 
     def write(results)
-      all_files = collect_tracked_files(results)
-      checksums = all_files.each_with_object({}) do |file, hash|
-        hash[file] = current_checksum(file) if file_exist?(file)
+      new_checksums = calculate_checksums(results)
+
+      File.open(@cache_file, File::RDWR | File::CREAT) do |f|
+        f.flock(File::LOCK_EX)
+        data = merge_with_file(f, new_checksums)
+        write_to_file(f, data)
       end
-      File.write(@cache_file, checksums.sort.to_h.to_yaml)
     end
 
     private
+
+    def calculate_checksums(results)
+      all_files = collect_tracked_files(results)
+      all_files.each_with_object({}) do |file, hash|
+        hash[file] = current_checksum(file) if file_exist?(file)
+      end
+    end
+
+    def merge_with_file(file, new_checksums)
+      content = file.read
+      return new_checksums if content.empty?
+
+      (YAML.safe_load(content) || {}).merge(new_checksums)
+    end
+
+    def write_to_file(file, data)
+      file.rewind
+      file.write(data.sort.to_h.to_yaml)
+      file.flush
+      file.truncate(file.pos)
+    end
 
     def cached_checksums
       @cached_checksums ||= File.exist?(@cache_file) && YAML.safe_load_file(@cache_file)
