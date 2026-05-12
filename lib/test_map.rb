@@ -18,13 +18,29 @@ module TestMap
 
   def self.cache
     @cache ||= Cache.new(
-      "#{Dir.pwd}/#{Config[:cache_file]}",
-      "#{Dir.pwd}/#{Config[:out_file]}"
+      File.join(Dir.pwd, Config[:cache_file]),
+      File.join(Dir.pwd, Config[:out_file])
     )
+  end
+
+  def self.reset!
+    @reporter = nil
+    @cache = nil
+    Config.reset!
   end
 
   class << self
     attr_accessor :suite_passed
+
+    def write_results
+      out_file = File.join(Dir.pwd, Config.config[:out_file])
+      full_results = reporter.write(out_file)
+
+      # All tests were cache-skipped or nothing recorded, existing files are still valid
+      return unless full_results
+
+      cache.write(full_results) if suite_passed
+    end
   end
 end
 

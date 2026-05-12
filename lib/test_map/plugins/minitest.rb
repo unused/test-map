@@ -34,13 +34,7 @@ module TestMap
       end
 
       def self.write_results
-        out_file = "#{Dir.pwd}/#{Config.config[:out_file]}"
-        full_results = TestMap.reporter.write(out_file)
-
-        # All tests were cache-skipped or nothing recorded, existing files are still valid
-        return unless full_results
-
-        TestMap.cache.write(full_results) if TestMap.suite_passed
+        TestMap.write_results
       end
 
       def before_setup

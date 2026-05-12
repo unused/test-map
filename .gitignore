@@ -1,3 +1,5 @@
 /.bundle/
 /pkg/
 /coverage/
+test-*.lock
+.test-*.lock

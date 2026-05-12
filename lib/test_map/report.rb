@@ -1,31 +1,38 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'tempfile'
 
 module TestMap
   # Report keeps track of associated files to test execution.
   class Report
-    def initialize = @results = Hash.new { Set.new }
+    def initialize
+      @results = Hash.new { |hash, key| hash[key] = Set.new }
+    end
 
     def clear
-      @results = Hash.new { Set.new }
+      @results = Hash.new { |hash, key| hash[key] = Set.new }
     end
 
     def add(files)
       test_file, *associated_files = files
       TestMap.logger.info "Adding #{test_file} with #{associated_files}"
       associated_files.each do |file|
-        @results[file] = @results[file] << test_file
+        @results[file] << test_file
       end
     end
 
-    def write(file)
+    def write(file_path)
       return if results.empty?
 
-      File.open(file, File::RDWR | File::CREAT) do |f|
-        f.flock(File::LOCK_EX)
-        data = merge_with_file(f)
-        write_to_file(f, data)
+      lock_path = "#{file_path}.lock"
+      File.open(lock_path, File::RDWR | File::CREAT) do |lock_file|
+        lock_file.flock(File::LOCK_EX)
+
+        current_data = read_file file_path
+        data = merge(results, current_data)
+        atomic_write(file_path, data.to_yaml)
+
         data
       end
     end
@@ -41,18 +48,21 @@ module TestMap
 
     private
 
-    def merge_with_file(file)
-      content = file.read
-      return results if content.empty? || !Config.config[:merge]
-
-      merge(results, YAML.safe_load(content) || {})
+    def atomic_write(file_path, content)
+      temp_file = Tempfile.new([File.basename(file_path), '.tmp'], File.dirname(file_path))
+      begin
+        temp_file.write(content)
+        temp_file.close
+        File.rename(temp_file.path, file_path)
+      ensure
+        temp_file.close!
+      end
     end
 
-    def write_to_file(file, data)
-      file.rewind
-      file.write(data.to_yaml)
-      file.flush
-      file.truncate(file.pos)
+    def read_file(file_path)
+      return {} unless File.exist?(file_path) && Config.config[:merge]
+
+      YAML.safe_load_file(file_path) || {}
     end
   end
 end

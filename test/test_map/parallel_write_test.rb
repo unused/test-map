@@ -6,11 +6,11 @@ require 'yaml'
 
 class ParallelWriteTest < Minitest::Test
   def setup
+    TestMap.reset!
     @out_file = File.expand_path('test-map-parallel.yml')
     @cache_file = File.expand_path('test-cache-parallel.yml')
     FileUtils.rm_f(@out_file)
     FileUtils.rm_f(@cache_file)
-    TestMap.reporter.clear
 
     TestMap::Config.configure do |config|
       config[:merge] = true
@@ -20,6 +20,7 @@ class ParallelWriteTest < Minitest::Test
   end
 
   def teardown
+    TestMap.reset!
     FileUtils.rm_f(@out_file)
     FileUtils.rm_f(@cache_file)
     Dir.glob('test_*.rb').each { |f| FileUtils.rm_f(f) }
