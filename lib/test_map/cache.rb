@@ -2,6 +2,7 @@
 
 require 'digest'
 require 'yaml'
+require 'tempfile'
 
 module TestMap
   # Cache tracks file checksums to skip unchanged tests.
@@ -15,6 +16,7 @@ module TestMap
       @global_files_changed = nil
       @current_checksums = {}
       @file_exists_cache = {}
+      @cache_mtime = nil
     end
 
     def fresh?(test_file)
@@ -26,17 +28,49 @@ module TestMap
     end
 
     def write(results)
-      all_files = collect_tracked_files(results)
-      checksums = all_files.each_with_object({}) do |file, hash|
-        hash[file] = current_checksum(file) if file_exist?(file)
+      new_checksums = calculate_checksums(results)
+
+      lock_path = "#{@cache_file}.lock"
+      File.open(lock_path, File::RDWR | File::CREAT) do |lock_file|
+        lock_file.flock(File::LOCK_EX)
+
+        current_data = File.exist?(@cache_file) ? YAML.safe_load_file(@cache_file) : {}
+        data = (current_data || {}).merge(new_checksums)
+
+        atomic_write(@cache_file, data.sort.to_h.to_yaml)
       end
-      File.write(@cache_file, checksums.sort.to_h.to_yaml)
     end
 
     private
 
+    def atomic_write(file_path, content)
+      temp_file = Tempfile.new([File.basename(file_path), '.tmp'], File.dirname(file_path))
+      begin
+        temp_file.write(content)
+        temp_file.close
+        File.rename(temp_file.path, file_path)
+      ensure
+        temp_file.close!
+      end
+    end
+
+    def calculate_checksums(results)
+      all_files = collect_tracked_files(results)
+      all_files.each_with_object({}) do |file, hash|
+        hash[file] = current_checksum(file) if file_exist?(file)
+      end
+    end
+
+    # merge_with_file is no longer needed with the lock file approach
+
     def cached_checksums
-      @cached_checksums ||= File.exist?(@cache_file) && YAML.safe_load_file(@cache_file)
+      current_mtime = File.exist?(@cache_file) ? File.mtime(@cache_file) : nil
+
+      if @cached_checksums.nil? || @cache_mtime != current_mtime
+        @cache_mtime = current_mtime
+        @cached_checksums = @cache_mtime ? YAML.safe_load_file(@cache_file) : {}
+      end
+      @cached_checksums
     end
 
     def global_files_changed?

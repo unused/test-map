@@ -9,6 +9,10 @@ module TestMap
     def self.config = @config ||= default_config
     def self.configure = yield(config)
 
+    def self.reset!
+      @config = default_config
+    end
+
     def self.default_config
       { logger: Logger.new('/dev/null'), out_file: '.test-map.yml',
         cache_file: '.test-cache.yml',

@@ -27,4 +27,6 @@ Gem::Specification.new do |spec|
   spec.extra_rdoc_files = ['LICENSE.txt', 'README.md']
   spec.require_paths = ['lib']
   spec.metadata['rubygems_mfa_required'] = 'true'
+
+  spec.add_dependency 'logger'
 end

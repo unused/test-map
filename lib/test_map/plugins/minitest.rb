@@ -34,24 +34,7 @@ module TestMap
       end
 
       def self.write_results
-        out_file = "#{Dir.pwd}/#{Config.config[:out_file]}"
-        reporter_results = TestMap.reporter.results
-
-        # All tests were cache-skipped, existing files are still valid
-        return if reporter_results.empty?
-
-        full_results = merge_results(out_file, reporter_results)
-        File.write(out_file, full_results.to_yaml)
-        TestMap.cache.write(full_results) if TestMap.suite_passed
-      end
-
-      # Merge with existing map to preserve mappings for cache-skipped tests
-      def self.merge_results(out_file, reporter_results)
-        if File.exist?(out_file)
-          TestMap.reporter.merge(reporter_results, YAML.safe_load_file(out_file))
-        else
-          reporter_results
-        end
+        TestMap.write_results
       end
 
       def before_setup
